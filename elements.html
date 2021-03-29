@@ -43,12 +43,31 @@ sitemap:
 	<hr />
 	
 <!-- Preformatted Code -->
-	<h2>Preformatted</h2>
-	<pre><code>i = 0;
-	while (!deck.isInOrder()) {
-	print 'Iteration ' + i;
-	deck.shuffle();
-	i++;
-	}
-	print 'It took ' + i + ' iterations to sort the deck.';
+	<h2>가장 인상적인 SQL</h2>
+	<pre><code>
+	merge into search
+		USING dual
+		on (search='${search}' and
+		UCODE=${loginUcode})
+		when MATCHED THEN
+		UPDATE SET 
+		scount = scount+1,
+		stime = to_char(sysdate,'yy/mm/dd hh24:mi:ss')
+		WHEN
+		NOT MATCHED THEN
+		INSERT 
+		(search, UCODE,	SAGE, STYPE, STIME,	SRECORD,SCOUNT)
+		VALUES (trim('${search}'),${loginUcode},10,
+		<choose>
+			<when test='search.contains("#")'>'hash'</when>
+			<when test='search.contains("@")'>'user'</when>
+			<otherwise>'word'</otherwise>
+		</choose>
+		,to_char(sysdate,'yy/mm/dd hh24:mi:ss'),1,0)
 	</code></pre>
+	
+merge을 사용하여 검색어(search) 와 유저(ucode)의 같은데이터가 DB안에 있다면
+Update 문을 실행한다
+또는 검색어(search) 와 유저(ucode)가 DB안에 하나라도 다른데이터가 있다면
+Insert문을 실행한다 .
+Mybits xml 에서 사용할 수 있는 <choose>를 사용하여 Insert문의 값을 조건부로 저장이 가능하다
